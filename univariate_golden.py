@@ -5,18 +5,19 @@ from tabulate import tabulate
 
 # Inputs *********************************************************************
 def f(x):
-    return 1 + 2*(x**2) - np.exp(x) 
+    return x - np.sin(5*np.sqrt(2*x)) + 7*np.cos(4*x)
+    # return 1 + 2*(x**2) - np.exp(x)
 
 
 # +1 for maximising and -1 for minimising
-maximising = -1
+maximising = 1
 
 # accuracy tolerance
-e_tol = 0.0005
+e_tol = 0.05
 
 # Bounds
-a_0 = 0
-b_0 = 1
+a_0 = 2
+b_0 = 3
 
 #  :)
 phi = 0.618034
@@ -26,7 +27,8 @@ decimal_accuracy = 6
 # ****************************************************************************
 
 # Calc max number of iterations log_phi (e_tol /(b_0 - a_0))
-Omega = int(np.round(np.log(e_tol/(b_0-a_0))/np.log(phi)))
+Omega = int(np.ceil(np.log(e_tol/(b_0-a_0))/np.log(phi)))
+
 
 answer_table = []
 

@@ -8,16 +8,13 @@ from automatic_queue import Automatic_Queue
 # Inputs *********************************************************************
 def f(x: np.ndarray):
     # x is justa a numpy array. the first element is x1 and the second is x2
-    return (x[0]-3.14)**2 + (x[1]-2.72)**2 + np.sin(3*x[0]+1.41) + np.sin(4*x[1]- 1.73)
+    return 20 + x[0]**2 + x[1]**2 - 10*(np.cos(2*np.pi*x[0]) + np.cos(2*np.pi*x[1])) 
 
 # +1 for maximising and -1 for minimising
-maximising = -1
+maximising = 1
 
 # Initial Step lenght
-e = 0.3
-
-# Accuracy tolerance
-e_tol = 0.01
+e = 0.4
 
 # Initial point
 x_0 = np.array([1, 1])
@@ -39,7 +36,7 @@ answer_table = []
 x_k = x_0
 incumbent_solution = f(x_0)
 k = 0
-while(True):
+for i in range(20):
     neighbourhood = np.array([
         x_k + [e, 0],
         x_k + [0, e],
@@ -68,22 +65,27 @@ while(True):
     # Sorts the indexes of the results array from worst performing to best performing
     ordered_results_indeces = np.argsort(maximising*results)
     
+    best_current = results[ordered_results_indeces[0]]
     for index in reversed(ordered_results_indeces):
         if index not in tabu_list.queue:
-            if maximising*results[index] > maximising*incumbent_solution:
-                incumbent_solution = results[index]
-                time_without_improvement = 0
-            else:
-                time_without_improvement += 1
-                
-            x_k = neighbourhood[index]
-           
-            if index <= 1:
-                tabu_list.enqueue(index+2)
-            else:
-                tabu_list.enqueue(index-2)
+            if maximising*results[index]  >= maximising*best_current:
+                best_current = results[index]
+                if maximising*results[index] > maximising*incumbent_solution:
+                    incumbent_solution = results[index]
+                    time_without_improvement = 0
+                else:
+                    time_without_improvement += 1
+                    
+                x_k = neighbourhood[index]
             
-            break  
+                if index <= 1:
+                    tabu_list.enqueue(index+2)
+                else:
+                    tabu_list.enqueue(index-2)
+            else:
+                break
+            
+              
     k += 1
     if time_without_improvement >= time_to_stop+1:
         break

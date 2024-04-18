@@ -26,6 +26,9 @@ x_0 = 0.7
 #  :)
 phi = 0.618034
 
+# Maximum number of iterations (used if you don't want to wait till convergence)
+max_iterations = 30
+
 # How many decimals you want round off to
 decimal_accuracy = 6
 # ****************************************************************************
@@ -35,7 +38,7 @@ answer_table = []
 
 x_k = x_0
 k = 0
-while True:
+for i in range(max_iterations):
     
     if e < e_tol:
         break

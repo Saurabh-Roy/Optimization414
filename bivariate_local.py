@@ -6,27 +6,29 @@ from tabulate import tabulate
 # Inputs *********************************************************************
 def f(x: np.ndarray):
     # x is justa a numpy array. the first element is x1 and the second is x2
-    return -(x[0]**2) - 4*(x[1]**2) + 2*x[0] + 8*x[1] - 5 
+    return 837.96  - x[0]*np.sin(np.sqrt(x[0])) - x[1]*np.sin(np.sqrt(x[1]))
+
 
 # +1 for maximising and -1 for minimising
-maximising = 1
+maximising = -1
 
 # Initial Step lenght
-e = 0.3
+e = 5
 
 # a
-a = 0.5
+a = 1
 
 # Accuracy tolerance
 e_tol = 0.01
 
 # Initial point
-x_0 = np.array([0, 0.5])
+x_0 = np.array([250, 260])
 
-
+# Maximum number of iterations (used if you don't want to wait till convergence)
+max_iterations = 30
 
 # How many decimals you want round off to
-decimal_accuracy = 6
+decimal_accuracy = 3
 
 # ****************************************************************************
 
@@ -35,7 +37,7 @@ answer_table = []
 
 x_k = x_0
 k = 0
-while True:
+for i in range(max_iterations):
     neighbourhood = np.array([
         x_k + [e, 0],
         x_k - [e, 0],
