@@ -3,8 +3,6 @@ from tabulate import tabulate
 
 # Output should appear in a text file called results.txt
 
-# WARNING THE LAST ||Ak - Dk||1 column is currenlty wrong
-
 # Inputs *********************************************************************
 def f(x: np.ndarray):
     # x is justa a numpy array. the first element is x1 and the second is x2
