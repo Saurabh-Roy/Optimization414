@@ -6,23 +6,23 @@ from tabulate import tabulate
 # Inputs *********************************************************************
 def f(x: np.ndarray):
     # x is justa a numpy array. the first element is x1 and the second is x2
-    return 837.96  - x[0]*np.sin(np.sqrt(x[0])) - x[1]*np.sin(np.sqrt(x[1]))
+    return -1*(x[0]**3) + 3*x[0] - (x[1]**2)
 
 
 # +1 for maximising and -1 for minimising
-maximising = -1
+maximising = 1
 
 # Initial Step lenght
-e = 5
+e = 0.3
 
 # a
-a = 1
+a = 0.5
 
 # Accuracy tolerance
-e_tol = 0.01
+e_tol = 0.1
 
 # Initial point
-x_0 = np.array([250, 260])
+x_0 = np.array([0.7, -0.5])
 
 # Maximum number of iterations (used if you don't want to wait till convergence)
 max_iterations = 30

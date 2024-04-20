@@ -8,25 +8,31 @@ from automatic_queue import Automatic_Queue
 # Inputs *********************************************************************
 def f(x: np.ndarray):
     # x is justa a numpy array. the first element is x1 and the second is x2
-    return 20 + x[0]**2 + x[1]**2 - 10*(np.cos(2*np.pi*x[0]) + np.cos(2*np.pi*x[1])) 
+    return x[0]**2 + x[1]**2 - 2*x[0] + 4*x[1] + 1
 
 # +1 for maximising and -1 for minimising
-maximising = 1
+maximising = -1
+
+# aspiration criterion
+aspiration_criterion = True
 
 # Initial Step lenght
-e = 0.4
+e = 0.3
 
 # Initial point
-x_0 = np.array([1, 1])
+x_0 = np.array([0.8, -1.5])
 
 # Time not improving till you want to stop
-time_to_stop = 5
+time_to_stop = 3
+
+# max iterations
+max_iterations = 100
 
 # Tabue List: max_size = how many items can be tabu at one time
 tabu_list = Automatic_Queue(max_size=2)
 
 # How many decimals you want round off to
-decimal_accuracy = 3
+decimal_accuracy = 6
 # ****************************************************************************
 
 answer_table = []
@@ -36,7 +42,7 @@ answer_table = []
 x_k = x_0
 incumbent_solution = f(x_0)
 k = 0
-for i in range(20):
+for i in range(max_iterations):
     neighbourhood = np.array([
         x_k + [e, 0],
         x_k + [0, e],
@@ -67,7 +73,7 @@ for i in range(20):
     
     best_current = results[ordered_results_indeces[0]]
     for index in reversed(ordered_results_indeces):
-        if index not in tabu_list.queue:
+        if index not in tabu_list.queue or (aspiration_criterion == True and maximising*results[index] > maximising*incumbent_solution):
             if maximising*results[index]  >= maximising*best_current:
                 best_current = results[index]
                 if maximising*results[index] > maximising*incumbent_solution:
@@ -84,10 +90,11 @@ for i in range(20):
                     tabu_list.enqueue(index-2)
             else:
                 break
+        
             
               
     k += 1
-    if time_without_improvement >= time_to_stop+1:
+    if time_without_improvement >= time_to_stop+2:
         break
      
 formated_table =tabulate(answer_table, headers=['k','e','x_k','Neighbourhood', 'f(x_k)','Neighbourhood results'], tablefmt='fancy_grid',floatfmt=f'.{decimal_accuracy}f')

@@ -51,7 +51,7 @@ max_r = 2
 max_p = 10
 
 # Max number of epochs
-max_i = 24
+max_i = 4
 
 # Max iterations
 max_k = 20
@@ -107,7 +107,7 @@ r2_index = 0
 p = 0
 x_k = x_0  
 k = 0
-for i in range(max_i):
+for i in range(max_i+1):
     a = 0; r = 0
     
     while True:
@@ -119,23 +119,25 @@ for i in range(max_i):
         
         f_new_x = f(new_x_k)
         
-        row = [i, T, k, x_k, f_x,r1[r1_index-1], new_x_k, f_new_x, r2[r2_index]]
+        row = [i, T, k, x_k, f_x,r1[r1_index-1], new_x_k, f_new_x]
         
-        if maximising*f_new_x > maximising*f_x:
+        
+        # check metropolis here
+        metropolis = metropolis_criterion(f_x, f_new_x, T)
+        if metropolis == 1:
+            a += 1
+            x_k = new_x_k
+            row.append('---')
+        elif metropolis >= r2[r2_index]:
+            row.append(r2[r2_index])
+            r2_index += 1
+            a += 1
             x_k = new_x_k
         else:
-            # check metropolis here
-            metropolis = metropolis_criterion(f_x, f_new_x, T)
-            if metropolis == 1:
-                a += 1
-                x_k = new_x_k
-            elif metropolis >= r2[r2_index]:
-                r2_index += 1
-                a += 1
-                x_k = new_x_k
-            else:
-                r2_index += 1
-                r += 1  
+            row.append(r2[r2_index])
+            
+            r2_index += 1
+            r += 1  
         
         row.append(a)
         row.append(r)
@@ -168,7 +170,7 @@ for i in range(max_i):
         break
         
         
-formated_table = tabulate(answer_table, tablefmt='fancy_grid',floatfmt=f'.{decimal_accuracy}f')
+formated_table = tabulate(answer_table,headers = ['i','T','k','xk','f(xk)','r1','new_x','f(new_x)','r2','a','r'] ,tablefmt='fancy_grid',floatfmt=f'.{decimal_accuracy}f')
 print(formated_table)
 
 with open('results.txt', 'w') as output_file:

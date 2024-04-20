@@ -5,7 +5,8 @@ from tabulate import tabulate
 
 # Inputs *********************************************************************
 def f(x):
-    return x - np.sin(5*np.sqrt(2*x)) + 7*np.cos(4*x)
+    # return x - np.sin(5*np.sqrt(2*x)) + 7*np.cos(4*x)
+    return -2*(x**3) + x + np.exp(x)
     # return 1 + 2*(x**2) - np.exp(x)
 
 
@@ -16,8 +17,8 @@ maximising = 1
 e_tol = 0.05
 
 # Bounds
-a_0 = 2
-b_0 = 3
+a_0 = 0
+b_0 = 1.5
 
 #  :)
 phi = 0.618034
