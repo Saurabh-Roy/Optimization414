@@ -27,7 +27,6 @@ cooling_schedule = 'geometric'
 # cooling_schedule = 'linear'
 cooling_schedule = 'geometric'
 
-
 # Heating factor B'
 heating_factor = 1.15
 
