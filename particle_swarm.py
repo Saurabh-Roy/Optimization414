@@ -80,8 +80,8 @@ for k in range(num_iterations+1):
             particals[i] = x_population[i]
             
             
-        # if maximising*f(np.array([x_population[i]])) > maximising*f(x_best):
-        #     x_best = np.array([x_population[np.argmax(maximising*f(x_population))]])
+    # if maximising*f(np.array([x_population[i]])) > maximising*f(x_best):
+    #     x_best = np.array([x_population[np.argmax(maximising*f(x_population))]])
             
     velocities = np.array(new_velocities)
         
