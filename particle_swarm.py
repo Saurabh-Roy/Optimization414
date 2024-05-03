@@ -49,7 +49,7 @@ num_iterations = 1
 
 
 # How many decimals you want round off to
-decimal_accuracy = 4
+decimal_accuracy = 3
 
 # ****************************************************************************
 
@@ -129,7 +129,9 @@ print(velocities)
 print('last pop')
 print(x_population)
 
-print(len(r))
+print('last f(pop)')
+print(f(x_population))
+
 
 with open('results.txt', 'w') as output_file:
     output_file.write(formated_table)
