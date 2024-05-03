@@ -45,17 +45,19 @@ r = [0.43, 0.32, 0.77, 0.52, 0.45, 0.31, 0.98, 0.04, 0.89, 0.91, 0.46, 0.65, 0.1
 0.14, 0.42, 0.92, 0.79, 0.96, 0.66, 0.04, 0.85, 0.93, 0.68, 0.76, 0.74, 0.39, 0.66, 0.17]
 
 # Number of iterations to run
-num_iterations = 3
+num_iterations = 1
 
 
 # How many decimals you want round off to
-decimal_accuracy = 3
+decimal_accuracy = 4
 
 # ****************************************************************************
 
-def velocity_update(velocity: np.array,partical: np.array, x:np.array ,x_best: np.array, c1: float, c2: float, p1: float, p2: float, w: float) -> np.array:
-    
-    updated_velocity = w*velocity + p1*c1*(partical-x) + p2*c2*(x_best-x)
+def velocity_update(velocity: np.array,partical: np.array, x:np.array ,x_best: np.array, c1: float, c2: float, p1: float, p2: float, w: float, p3, p4) -> np.array:
+    # print(x)
+    updated_velocity_1 = w*velocity[0] + p1*c1*(partical[0]-x[0]) + p2*c2*(x_best[0,0]-x[0])
+    updated_velocity_2 = w*velocity[1] + p3*c1*(partical[1]-x[1]) + p4*c2*(x_best[0,1]-x[1])
+    updated_velocity = [updated_velocity_1, updated_velocity_2]
     # print(updated_velocity)
     return np.squeeze(updated_velocity)
 
@@ -75,13 +77,15 @@ for k in range(num_iterations+1):
     for i,partical in enumerate(particals):
         partical_copy = np.array([partical.copy()])
         
-        new_velocities.append(velocity_update(velocities[i],partical,x_population[i],x_best,c1,c2,r[random_number_index],r[random_number_index+1],w))
+        new_velocities.append(velocity_update(velocities[i],partical,x_population[i],x_best,c1,c2,r[random_number_index],r[random_number_index+1],w,r[random_number_index+2],r[random_number_index+3]))
         print(r[random_number_index])
         print(r[random_number_index+1])
-        random_number_index += 2
+        print(r[random_number_index+2])
+        print(r[random_number_index+3])
         # new_velocities[i] =  w*velocities[i] + p1*c1*(partical-x_population[i]) + p2*c2*(x_best-x_population[i])
         
-        x_population[i] += velocity_update(velocities[i],partical_copy,x_population[i],x_best,c1,c2,p1,p2,w)
+        x_population[i] += velocity_update(velocities[i],partical,x_population[i],x_best,c1,c2,r[random_number_index],r[random_number_index+1],w,r[random_number_index+3],r[random_number_index+3])
+        random_number_index += 4
         
         
         # current_itertations_x_best = np.array([x_population[np.argmax(maximising*f(x_population))]])
@@ -96,9 +100,34 @@ for k in range(num_iterations+1):
     #         x_best = np.array([x_population[np.argmax(maximising*f(x_population))]])
             
     velocities = np.array(new_velocities)
+    
+    
+    
+# for i,partical in enumerate(particals):
+#     partical_copy = np.array([partical.copy()])
+    
+#     new_velocities.append(velocity_update(velocities[i],partical,x_population[i],x_best,c1,c2,r[random_number_index],r[random_number_index+1],w,r[random_number_index+2],r[random_number_index+3]))
+#     print(r[random_number_index])
+#     print(r[random_number_index+1])
+#     print(r[random_number_index+2])
+#     print(r[random_number_index+3])
+#     # new_velocities[i] =  w*velocities[i] + p1*c1*(partical-x_population[i]) + p2*c2*(x_best-x_population[i])
+    
+#     x_population[i] += velocity_update(velocities[i],partical,x_population[i],x_best,c1,c2,r[random_number_index],r[random_number_index+1],w,r[random_number_index+3],r[random_number_index+3])
+#     random_number_index += 4
         
+# velocities = np.array(new_velocities)
+
+# print(x_population)
+# print(velocities)
+    
 formated_table = tabulate(answer_table,headers=['k','population', 'velocities','f(population)', 'x_best'], tablefmt='fancy_grid',floatfmt=f'.{decimal_accuracy}f')
 print(formated_table)
+print(velocities)
+print(x_population)
+
+print(len(r))
+
 with open('results.txt', 'w') as output_file:
     output_file.write(formated_table)
     
