@@ -123,7 +123,10 @@ for k in range(num_iterations+1):
     
 formated_table = tabulate(answer_table,headers=['k','population', 'velocities','f(population)', 'x_best'], tablefmt='fancy_grid',floatfmt=f'.{decimal_accuracy}f')
 print(formated_table)
+
+print('last velos')
 print(velocities)
+print('last pop')
 print(x_population)
 
 print(len(r))
