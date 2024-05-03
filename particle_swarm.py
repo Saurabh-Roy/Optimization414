@@ -10,7 +10,8 @@ import random
 def f(x: np.ndarray):
     # x is justa a numpy array. the first element is x1 and the second is x2
     # return (x[:,0]-3.14)**2 + (x[:,1]-2.72)**2 + np.sin(3*x[:,0] + 1.41) + np.sin(4*x[:,1]-1.73)
-    return 20 + x[:,0]**2 + x[:,1]**2 - 10*(np.cos(2*np.pi*x[:,0]) + np.cos(2*np.pi*x[:,1]))
+    # return 20 + x[:,0]**2 + x[:,1]**2 - 10*(np.cos(2*np.pi*x[:,0]) + np.cos(2*np.pi*x[:,1]))
+    return -x[:,0]**3 + 3*(x[:,0]) - x[:,1]**2
 
 # +1 for maximising and -1 for minimising
 maximising = 1
@@ -38,8 +39,13 @@ p1 = 0.5
 # 
 p2 = 0.5
 
+# radom numbers
+r = [0.43, 0.32, 0.77, 0.52, 0.45, 0.31, 0.98, 0.04, 0.89, 0.91, 0.46, 0.65, 0.12, 0.68,
+0.81, 0.91, 0.13, 0.91, 0.63, 0.10, 0.28, 0.55, 0.96, 0.96, 0.16, 0.97, 0.96, 0.49, 0.80,
+0.14, 0.42, 0.92, 0.79, 0.96, 0.66, 0.04, 0.85, 0.93, 0.68, 0.76, 0.74, 0.39, 0.66, 0.17]
+
 # Number of iterations to run
-num_iterations = 5
+num_iterations = 3
 
 
 # How many decimals you want round off to
@@ -50,12 +56,14 @@ decimal_accuracy = 3
 def velocity_update(velocity: np.array,partical: np.array, x:np.array ,x_best: np.array, c1: float, c2: float, p1: float, p2: float, w: float) -> np.array:
     
     updated_velocity = w*velocity + p1*c1*(partical-x) + p2*c2*(x_best-x)
-        
+    # print(updated_velocity)
     return np.squeeze(updated_velocity)
 
 
 
 answer_table = []
+
+random_number_index = 0
 
 for k in range(num_iterations+1):
     x_best = np.array([x_population[np.argmax(maximising*f(x_population))]])
@@ -66,7 +74,11 @@ for k in range(num_iterations+1):
     new_velocities = []
     for i,partical in enumerate(particals):
         partical_copy = np.array([partical.copy()])
-        new_velocities.append(velocity_update(velocities[i],partical,x_population[i],x_best,c1,c2,p1,p2,w))
+        
+        new_velocities.append(velocity_update(velocities[i],partical,x_population[i],x_best,c1,c2,r[random_number_index],r[random_number_index+1],w))
+        print(r[random_number_index])
+        print(r[random_number_index+1])
+        random_number_index += 2
         # new_velocities[i] =  w*velocities[i] + p1*c1*(partical-x_population[i]) + p2*c2*(x_best-x_population[i])
         
         x_population[i] += velocity_update(velocities[i],partical_copy,x_population[i],x_best,c1,c2,p1,p2,w)
@@ -79,9 +91,9 @@ for k in range(num_iterations+1):
             # print(x_population[i])
             particals[i] = x_population[i]
             
-            
-    # if maximising*f(np.array([x_population[i]])) > maximising*f(x_best):
-    #     x_best = np.array([x_population[np.argmax(maximising*f(x_population))]])
+                
+    #     if maximising*f(np.array([x_population[i]])) > maximising*f(x_best):
+    #         x_best = np.array([x_population[np.argmax(maximising*f(x_population))]])
             
     velocities = np.array(new_velocities)
         
